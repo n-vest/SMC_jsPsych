@@ -4,25 +4,22 @@ const urlParams = new URLSearchParams(location.search)
 const OFFLINE = urlParams.has('offline')
 
 
-function makeCompStimulus(left, right, chooseGreater) {
+function makeCompStimulus(left, right) {
   if (left > 0) { left = `+${left}` }
   if (right > 0) { right = `+${right}` }
-
-  const instruction = chooseGreater
-    ? "'A' key: left is greater, 'L' key: right is greater"
-    : "'A' key: left is lesser, 'L' key: right is lesser";
-
-  return `
-    <div style="display: flex; justify-content: center; font-size: 80px;">
-      <div>${left}</div>
-      <div style="width: 50vw; flex-shrink: 0;"></div>
-      <div>${right}</div>
-    </div>
-    <div>
-      <div style="text-align: center; margin-top: 200px; color: grey;">
-        ${instruction}
-      </div>
-    </div>`;
+        return `
+<div style="display: flex; justify-content: center;
+             font-size: 80px;">
+   <div>${left}</div>
+   <div style="width: 50vw; flex-shrink: 0;"></div>
+   <div>${right}</div>
+ </div>
+ <div>
+   <div style="text-align: center; margin-top: 200px;
+               color: grey;">
+     left arrow key: left is larger, right arrow key: right is larger
+   </div>
+ </div>`
 }
 
 /*
@@ -46,60 +43,59 @@ function extractGroup(list, columnName, columnValue) {
   return extractedBlock
 }
 
-function displayRow(all_trials, item, configuration, chooseGreater) {
+function displayRow(all_trials, item, configuration) {
   if (configuration == "simultaneous-ungrouped" || configuration == "simultaneous-grouped") {
     const trial = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: makeCompStimulus(item.Stimulus_L, item.Stimulus_R, chooseGreater),
-      choices: ['a', 'l'],
+      stimulus: makeCompStimulus(item.Stimulus_L, item.Stimulus_R),
+      choices: ['ArrowLeft', 'ArrowRight'],
       data: {
         Stimulus_ID: item.Stimulus_ID,
         Sections: item.Sections,
         configuration: configuration
       }
     }
-    all_trials.push(trial);
+    all_trials.push(trial)
   } else {
-    let Stimulus_L = item.Stimulus_L;
-    let Stimulus_R = item.Stimulus_R;
 
-    if (Stimulus_L > 0) { Stimulus_L = `+${Stimulus_L}` }
-    if (Stimulus_R > 0) { Stimulus_R = `+${Stimulus_R}` }
+    let Stimulus_L = item.Stimulus_L
+    let Stimulus_R = item.Stimulus_R
 
+    if (Stimulus_L > 0) { Stimulus_L = `+${Stimulus_L}`}
+    if (Stimulus_R > 0) { Stimulus_R = `+${Stimulus_R}`}
+    
     const trial1 = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `<div style="font-size: 5em;">${Stimulus_L}</div>`,
       choices: [],
-      trial_duration: 500
-    };
+      trial_duration: 2000
+    }
 
     const trial2 = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `<div style="font-size: 5em;">${Stimulus_R}</div>`,
       choices: [],
-      trial_duration: 500
-    };
-
-    const instruction = chooseGreater
-      ? "'A' key: left is greater, 'L' key: right is greater"
-      : "'A' key: left is lesser, 'L' key: right is lesser'";
+      trial_duration: 2000
+    }
 
     const trial3 = {
       type: jsPsychHtmlKeyboardResponse,
-      stimulus: `<div style="text-align: center; margin-top: 200px; color: grey;">
-        ${instruction}
-      </div>`,
-      choices: ['a', 'l'],
+      stimulus: `<div style="text-align: center; margin-top: 200px;
+               color: grey;">
+     left arrow key: left is larger, right arrow key: right is larger
+</div>`,
+      choices: ['ArrowLeft', 'ArrowRight'],
       data: {
         Stimulus_ID: item.Stimulus_ID,
         Sections: item.Sections,
         configuration: configuration
       }
-    };
+    }
 
-    all_trials.push(trial1);
-    all_trials.push(trial2);
-    all_trials.push(trial3);
+    all_trials.push(trial1)
+    all_trials.push(trial2)
+    all_trials.push(trial3)
+    
   }
 }
 
@@ -113,38 +109,40 @@ const jsPsych = initJsPsych({
 });
 
 function handleConfiguration(configuration) {
-  const SECTIONS = ["Section1", "Section2", "Section3", "Section4"];
+  const SECTIONS = ["Section1", "Section2", "Section3", "Section4"]
   for (const section of SECTIONS) {
-    let taskInstructions = '';
-    let chooseGreater = true;
-
+    let taskInstructions = ''
+    
     if (section == "Section1" || section == "Section2") {
-      taskInstructions = `Please indicate which of the two is <b>greater</b>.`;
+      taskInstructions = `Please indicate which of the two is <b>greater</b>.`
     } else {
-      taskInstructions = `Please indicate which of the two is <b>lesser</b>.`;
-      chooseGreater = false; // Change key mappings for lesser task
+      taskInstructions = `Please indicate which of the two is <b>lesser</b>.`
     }
 
     all_trials.push({
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `<p>Please take a break if you need to. ${taskInstructions}</p><p>Press [SPACEBAR] to continue</p>`,
       choices: [' '],
-    });
+    })
 
-    const sectionStimuli = extractGroup(allStimuli, "Sections", section);
+    const sectionStimuli = extractGroup(allStimuli, "Sections", section)
 
     if (configuration == "simultaneous-grouped" || configuration == "sequential-grouped") {
-      let comparisonTypes = ["Mixed", "Positive", "Negative"];
-      comparisonTypes = jsPsych.randomization.shuffle(comparisonTypes);
+      let comparisonTypes = ["Mixed", "Positive", "Negative"]
+      comparisonTypes = jsPsych.randomization.shuffle(comparisonTypes)
+      // console.log(comparisonTypes)
       for (const comparisonType of comparisonTypes) {
-        const comparisonTypeStimuli = extractGroup(sectionStimuli, "Comparison_Type", comparisonType);
+        const comparisonTypeStimuli = extractGroup(sectionStimuli,
+                                                   "Comparison_Type",
+                                                   comparisonType)
         for (const item of comparisonTypeStimuli) {
-          displayRow(all_trials, item, configuration, chooseGreater);
+          displayRow(all_trials, item, configuration)
         }
       }
+      // pass
     } else {
       for (const item of sectionStimuli) {
-        displayRow(all_trials, item, configuration, chooseGreater);
+        displayRow(all_trials, item, configuration)
       }
     }
 
@@ -153,28 +151,20 @@ function handleConfiguration(configuration) {
         type: jsPsychSurveyText,
         questions: [{ prompt: 'What strategy are you using?', rows: 5 }],
         data: { questionAfter: section, questionType: 'strategy' }
-      });
+      })
     }
   }
+
 }
 
 // this list will contain all the trials we want jsPsych to run      
 const all_trials = []
 
-// Add the text entry box
-all_trials.push({
-  type: jsPsychSurveyText,
-  questions: [
-    { prompt: "Please enter the last 4 digits of your university student ID:", rows: 1 },
-  ],
-  data: { questionType: "pre-experiment" }
-});
-
 allStimuli = jsPsych.randomization.shuffle(allStimuli)
 
 all_trials.push({
   type: jsPsychInstructions,
-  pages: ['Welcome to the first task in this study. This task will take approximately 20 minutes.', 'Just like in the video, you will judge which number is greater or lesser in a pair using the A and L keys on your keyboard. <br>When you are ready to begin, click next.'],
+  pages: ['Indicate which one is greater/lesser', 'Second page'],
   show_clickable_nav: true
 })
 
@@ -226,16 +216,6 @@ async function main() {
       data_string: () => jsPsych.data.get().json()
     });
   }
-
-// Add the final message
-all_trials.push({
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: `<div style="text-align: center; margin-top: 200px; font-size: 2em;">
-               Thank you for participating in the experiment.<br>
-               Please return to Qualtrics to complete the survey.<br><br>
-             </div>`,
-  choices: "ALL_KEYS"
-});
 
   jsPsych.run(all_trials);
 }

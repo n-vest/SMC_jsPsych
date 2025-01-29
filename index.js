@@ -1,9 +1,3 @@
-const urlParams = new URLSearchParams(location.search)
-// This excerpt allows you to run the experiment offline by adding
-// ?offline=1 to the url
-const OFFLINE = urlParams.has('offline')
-
-
 function makeCompStimulus(left, right) {
   if (left > 0) { left = `+${left}` }
   if (right > 0) { right = `+${right}` }

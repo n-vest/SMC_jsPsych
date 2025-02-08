@@ -82,7 +82,7 @@ function displayRow(all_trials, item, configuration, chooseGreater) {
 
     const instruction = chooseGreater
       ? "'A' key: first is greater, 'L' key: second is greater"
-      : "'A' key: first is lesser, 'L' key: second is lesser'";
+      : "'A' key: first is lesser, 'L' key: second is lesser";
 
     const trial3 = {
       type: jsPsychHtmlKeyboardResponse,

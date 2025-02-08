@@ -151,7 +151,7 @@ function handleConfiguration(configuration) {
     if (section == "Section2" || section == "Section4") {
       all_trials.push({
         type: jsPsychSurveyText,
-        questions: [{ prompt: 'What strategy are you using?', rows: 5 }],
+        questions: [{ prompt: 'What strategy(s) are you using to judge the pairs?', rows: 5 }],
         data: { questionAfter: section, questionType: 'strategy' }
       });
     }

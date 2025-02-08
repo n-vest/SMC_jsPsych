@@ -9,8 +9,8 @@ function makeCompStimulus(left, right, chooseGreater) {
   if (right > 0) { right = `+${right}` }
 
   const instruction = chooseGreater
-    ? "'A' key: left is greater, 'L' key: right is greater"
-    : "'A' key: left is lesser, 'L' key: right is lesser";
+    ? "'A' key: first is greater, 'L' key: second is greater"
+    : "'A' key: first is lesser, 'L' key: second is lesser";
 
   return `
     <div style="display: flex; justify-content: center; font-size: 80px;">
@@ -81,8 +81,8 @@ function displayRow(all_trials, item, configuration, chooseGreater) {
     };
 
     const instruction = chooseGreater
-      ? "'A' key: left is greater, 'L' key: right is greater"
-      : "'A' key: left is lesser, 'L' key: right is lesser'";
+      ? "'A' key: first is greater, 'L' key: second is greater"
+      : "'A' key: first is lesser, 'L' key: second is lesser'";
 
     const trial3 = {
       type: jsPsychHtmlKeyboardResponse,

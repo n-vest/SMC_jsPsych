@@ -174,7 +174,7 @@ allStimuli = jsPsych.randomization.shuffle(allStimuli)
 
 all_trials.push({
   type: jsPsychInstructions,
-  pages: ['Welcome to the first task in this study. This task will take approximately 20 minutes.', 'Just like in the video, you will judge which number is greater or lesser in a pair using the A and L keys on your keyboard. <br>When you are ready to begin, click next.'],
+  pages: ['Welcome to the first task in this study. This task will take approximately 20 minutes.', 'As described in Qualtrics, you will use the A and L keys for your judgments. <br>When you are ready to begin, click next.'],
   show_clickable_nav: true
 })
 

@@ -70,14 +70,14 @@ function displayRow(all_trials, item, configuration, chooseGreater) {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `<div style="font-size: 5em;">${Stimulus_L}</div>`,
       choices: [],
-      trial_duration: 500
+      trial_duration: 1000
     };
 
     const trial2 = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `<div style="font-size: 5em;">${Stimulus_R}</div>`,
       choices: [],
-      trial_duration: 500
+      trial_duration: 1000
     };
 
     const instruction = chooseGreater
@@ -165,7 +165,7 @@ const all_trials = []
 all_trials.push({
   type: jsPsychSurveyText,
   questions: [
-    { prompt: "Please enter the last 4 digits of your university student ID:", rows: 1 },
+    { prompt: "Please enter your participant ID:", rows: 1 },
   ],
   data: { questionType: "pre-experiment" }
 });

@@ -113,7 +113,7 @@ const jsPsych = initJsPsych({
 });
 
 function handleConfiguration(configuration) {
-  const SECTIONS = ["Section1", "Section2"];
+  const SECTIONS = ["Section3", "Section4"];
   for (const section of SECTIONS) {
     let taskInstructions = '';
     let chooseGreater = true;
